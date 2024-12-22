@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Api que busca gato</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter+Tight:ital,wght@0,100..900;1,100..900&display=swap');
+
+        * {
+            font-family: "Inter Tight", serif;
+            font-optical-sizing: auto;
+            font-style: normal;
+            margin: 0;
+            padding: 0;
+        }
+
+        .centraiza-flex {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .centraiza-flex-column {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .textoLoading {
+            display: none;
+        }
+
+        img {
+            max-width: 300px;
+            max-height: 300px;
+        }
+
+        .container-imagem {
+            display: flex;
+            flex-direction: column;
+            margin: auto;
+            width: 300px;
+            min-height: 350px;
+            width: 80%;
+        }
+
+        button {
+            background-color: #BB7E8C;
+            padding: 15px;
+            border: none;
+            border-radius: 8px;
+            font-weight: 700;
+        }
+
+        .citacao {
+            width: 50%;
+            display: grid;
+            justify-content: center;
+        }
+
+        .saibaMais {
+            margin-top: 30px;
+        }
+
+        .apareceClick {
+            display: none;
+            width: 80%;
+            margin: auto;
+            gap: 10px;
+        }
+
+        .titulo {
+            width: 50%;
+        }
+
+        a {
+            text-decoration: none;
+            color: black;
+        }
+    </style>
+</head>
+
+<body>
+    <main>
+        <div class="container">
+            <div class="texto centraiza-flex">
+                <h1>API que busca gato</h1>
+            </div>
+            <div class="container-imagem centraiza-flex">
+                <div class="imagem" id="imagem"></div>
+                <div id="textoLoading" class="textoLoading centraiza-flex">Carregando...</div>
+                <div class="citacao" id="citacao"></div>
+            </div>
+
+            <div class="botao centraiza-flex">
+                <button id="api" onclick="chamaApi()">Ver gato</button>
+            </div>
+            <div class="saibaMais centraiza-flex">
+                <button onclick="aparece()">Saiba mais sobre as duas APIs que estão funcionando</button>
+            </div>
+            <div class="apareceClick" id="aparece">
+                <!-- Seção da API dos Gatinhos -->
+                <div class="titulo centraiza-flex-column">
+                    <a href="https://api.thecatapi.com" target="_blank">
+                        <h2>API dos Gatinhos</h2>
+                    </a>
+                    <h3>The Cat API</h3>
+                    <p>
+                        Essa API é usada para obter imagens aleatórias de gatos. Com ela, você pode trazer fotos
+                        adoráveis de gatos em tempo real, adicionando um toque divertido ao projeto.
+                        A integração é feita através de requisições HTTP ao endpoint <code>/v1/images/search</code>, que
+                        retorna URLs das imagens.
+                    </p>
+                    <p>
+                        <strong>Exemplo de uso no projeto:</strong> Ao clicar em um botão, o JavaScript faz uma
+                        requisição <code>fetch</code> para a API e exibe a imagem retornada em uma área específica da
+                        página.
+                    </p>
+                </div>
+
+                <!-- Seção da API das Mensagens -->
+                <div class="titulo centraiza-flex-column">
+                    <a href="https://api.adviceslip.com" target="_blank">
+                        <h2>API das Mensagens</h2>
+                    </a>
+                    <h3>Advice Slip API</h3>
+                    <p>
+                        Essa API é utilizada para fornecer conselhos aleatórios. Ela retorna frases motivacionais ou
+                        dicas em formato JSON, ideal para criar uma funcionalidade leve e interativa no site.
+                        O endpoint principal é <code>/advice</code>, que responde com um conselho único.
+                    </p>
+                    <p>
+                        <strong>Exemplo de uso no projeto:</strong> Um botão permite ao usuário obter um novo conselho a
+                        cada clique. O texto do conselho é exibido dinamicamente em uma seção designada.
+                    </p>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+</body>
+<script>
+    //window.alert("Ative a tradução do site!")
+    function aparece() {
+        const dizer = document.getElementById("aparece")
+        if (dizer.style.display == "flex") {
+            dizer.style.display = "none"
+        } else {
+            dizer.style.display = "flex"
+        }
+    }
+    async function chamaApi() {
+        const textoLoading = document.getElementById('textoLoading');
+        textoLoading.style.display = 'block';
+
+        try {
+            fetch('https://api.thecatapi.com/v1/images/search')
+                .then(response => response.json()) // Converte a resposta em JSON
+                .then(data => {
+                    textoLoading.style.display = "none";
+                    const imgUrl = data[0].url; // A URL da imagem está no primeiro item da resposta
+                    const catContainer = document.getElementById('imagem');
+
+                    // Cria ou atualiza a imagem dentro da div
+                    catContainer.innerHTML = `<img src="${imgUrl}" alt="Imagem de um gato fofo" style="max-width: 100%; height: auto;">`;
+                })
+
+        } catch (error) {
+
+        }
+        try {
+            fetch('https://api.adviceslip.com/advice')
+                .then(response => response.json())
+                .then(data => {
+                    const advice = data.slip.advice;
+                    document.getElementById('citacao').innerText = advice;
+
+                })
+
+        } catch (error) {
+
+        }
+
+
+    }
+
+
+</script>
+
+</html>
